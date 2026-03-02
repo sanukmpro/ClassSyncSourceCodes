@@ -42,11 +42,11 @@ class _ChatScreenState extends State<ChatScreen> with SingleTickerProviderStateM
   final String _authUid = FirebaseAuth.instance.currentUser?.uid ?? "";
   final profanityFilter = ProfanityFilter();
 
-  final String cloudName = "dahslwjab";
+  final String cloudName = "can not show this secret";
   final String uploadPreset = "class_sync_uploads";
   final String folderName = "chat_media";
-  final String _apiKey = "886847796499475";
-  final String _apiSecret = "ed5NfxsJf007_4n2lI2GfJTFB3k";
+  final String _apiKey = "can not show this secret";
+  final String _apiSecret = "can not show this secret";
 
   String? _mySenderId;
   bool _isTeacher = false;
@@ -483,4 +483,5 @@ class _AudioPlayerWidgetState extends State<_AudioPlayerWidget> {
       ]);
     }));
   }
+
 }
