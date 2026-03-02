@@ -42,52 +42,52 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions web = FirebaseOptions(
     apiKey: 'can not show this secret',
-    appId: '1:492706844423:web:b880812118ecfa5e59bfa2',
-    messagingSenderId: '492706844423',
+    appId: 'can not show this secret',
+    messagingSenderId: 'can not show this secret',
     projectId: 'class-sync-eb06a',
     authDomain: 'class-sync-eb06a.firebaseapp.com',
     storageBucket: 'class-sync-eb06a.firebasestorage.app',
-    measurementId: 'G-H1EWKNN129',
+    measurementId: 'can not show this secret',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'can not show this secret',
-    appId: '1:492706844423:android:093d5c3c129400b859bfa2',
-    messagingSenderId: '492706844423',
+    appId: 'can not show this secret',
+    messagingSenderId: 'can not show this secret',
     projectId: 'class-sync-eb06a',
     storageBucket: 'class-sync-eb06a.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'can not show this secret',
-    appId: '1:492706844423:ios:94b23a6e07e934bd59bfa2',
-    messagingSenderId: '492706844423',
+    appId: 'can not show this secret',
+    messagingSenderId: 'can not show this secret',
     projectId: 'class-sync-eb06a',
     storageBucket: 'class-sync-eb06a.firebasestorage.app',
-    androidClientId: '492706844423-2gea5e4e8fjhgdqiqrpievhp76cbtl5o.apps.googleusercontent.com',
-    iosClientId: '492706844423-ivbu39d4679eoivdv6jsh4vph9nm03s2.apps.googleusercontent.com',
+    androidClientId: 'can not show this secret',
+    iosClientId: 'can not show this secret',
     iosBundleId: 'com.example.classSync',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
     apiKey: 'can not show this secret',
-    appId: '1:492706844423:ios:94b23a6e07e934bd59bfa2',
-    messagingSenderId: '492706844423',
+    appId: '1can not show this secret',
+    messagingSenderId: 'can not show this secret',
     projectId: 'class-sync-eb06a',
     storageBucket: 'class-sync-eb06a.firebasestorage.app',
-    androidClientId: '492706844423-2gea5e4e8fjhgdqiqrpievhp76cbtl5o.apps.googleusercontent.com',
-    iosClientId: '492706844423-ivbu39d4679eoivdv6jsh4vph9nm03s2.apps.googleusercontent.com',
+    androidClientId: 'can not show this secret',
+    iosClientId: 'can not show this secret',
     iosBundleId: 'com.example.classSync',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(
     apiKey: 'can not show this secret-g',
-    appId: '1:492706844423:web:9fddafd417ce7ebe59bfa2',
-    messagingSenderId: '492706844423',
+    appId: 'can not show this secret',
+    messagingSenderId: 'can not show this secret',
     projectId: 'class-sync-eb06a',
     authDomain: 'class-sync-eb06a.firebaseapp.com',
     storageBucket: 'class-sync-eb06a.firebasestorage.app',
-    measurementId: 'G-6Z9BZQPL2W',
+    measurementId: 'can not show this secret',
   );
 
 }
