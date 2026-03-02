@@ -37,8 +37,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   final String _cloudName = "dahslwjab";
   final String _uploadPreset = "class_sync_uploads";
-  final String _apiKey = "886847796499475";
-  final String _apiSecret = "ed5NfxsJf007_4n2lI2GfJTFB3k";
+  final String _apiKey = "can not show this secret";
+  final String _apiSecret = "can not show this secret";
 
   @override
   void initState() {
@@ -450,4 +450,5 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       if (mounted) setState(() => _isLoading = false);
     }
   }
+
 }
