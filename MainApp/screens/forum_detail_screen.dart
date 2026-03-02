@@ -35,8 +35,8 @@ class _ForumDetailScreenState extends State<ForumDetailScreen> {
   final String cloudName = "dahslwjab";
   final String uploadPreset = "class_sync_uploads";
   final String folderName = "forum_media";
-  final String _apiKey = "886847796499475";
-  final String _apiSecret = "ed5NfxsJf007_4n2lI2GfJTFB3k";
+  final String _apiKey = "can not show this secret";
+  final String _apiSecret = "can not show this secret";
 
   String? _replyingToId;
   String? _replyingToName;
@@ -639,4 +639,5 @@ class _ForumDetailScreenState extends State<ForumDetailScreen> {
       }
     }
   }
+
 }
