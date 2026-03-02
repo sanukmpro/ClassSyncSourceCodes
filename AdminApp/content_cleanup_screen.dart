@@ -20,8 +20,8 @@ class _ContentCleanupScreenState extends State<ContentCleanupScreen> {
 
   // --- CLOUDINARY CREDENTIALS ---
   final String _cloudName = "dahslwjab";
-  final String _apiKey = "886847796499475";
-  final String _apiSecret = "ed5NfxsJf007_4n2lI2GfJTFB3k";
+  final String _apiKey = "can not show this secret";
+  final String _apiSecret = "can not show this secret";
 
   // --- CLOUDINARY DELETE LOGIC ---
   Future<void> _deleteFromCloudinary(String? publicId, String? fileExt) async {
@@ -286,4 +286,5 @@ class ForumDetailReviewScreen extends StatelessWidget {
       ),
     );
   }
+
 }
