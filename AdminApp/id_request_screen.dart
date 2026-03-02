@@ -14,7 +14,7 @@ class IdRequestScreen extends StatefulWidget {
 class _IdRequestScreenState extends State<IdRequestScreen> {
   static const String _serviceId = 'class_sync_admin';
   static const String _templateId = 'template_3nnc8bx';
-  static const String _publicKey = 'oSQlLeSsuJJmvZXh9';
+  static const String _publicKey = 'can not show this secret';
 
   String _formatSubjects(dynamic subjectsData) {
     if (subjectsData == null) return "Not Assigned";
@@ -317,3 +317,4 @@ class _IdRequestScreenState extends State<IdRequestScreen> {
     );
   }
 }
+
