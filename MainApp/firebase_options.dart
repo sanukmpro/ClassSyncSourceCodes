@@ -41,7 +41,7 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyDDgXymrtyxdjgaxuvLHoi6fysVWg4DkQQ',
+    apiKey: 'can not show this secret',
     appId: '1:492706844423:web:b880812118ecfa5e59bfa2',
     messagingSenderId: '492706844423',
     projectId: 'class-sync-eb06a',
@@ -51,7 +51,7 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDvfrlx6XT2HzPGz_SQJXgCSOeFmLYnucg',
+    apiKey: 'can not show this secret',
     appId: '1:492706844423:android:093d5c3c129400b859bfa2',
     messagingSenderId: '492706844423',
     projectId: 'class-sync-eb06a',
@@ -59,7 +59,7 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyCne6LI4Ig_UloNuoNPrEnMZ9Wdk9E0OcA',
+    apiKey: 'can not show this secret',
     appId: '1:492706844423:ios:94b23a6e07e934bd59bfa2',
     messagingSenderId: '492706844423',
     projectId: 'class-sync-eb06a',
@@ -70,7 +70,7 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyCne6LI4Ig_UloNuoNPrEnMZ9Wdk9E0OcA',
+    apiKey: 'can not show this secret',
     appId: '1:492706844423:ios:94b23a6e07e934bd59bfa2',
     messagingSenderId: '492706844423',
     projectId: 'class-sync-eb06a',
@@ -81,7 +81,7 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'AIzaSyBtB2-P14TZgRqraHd4KSL7fL3gaqMih-g',
+    apiKey: 'can not show this secret-g',
     appId: '1:492706844423:web:9fddafd417ce7ebe59bfa2',
     messagingSenderId: '492706844423',
     projectId: 'class-sync-eb06a',
