@@ -23,8 +23,8 @@ class _TeacherDashboardScreenState extends State<TeacherDashboardScreen> {
 
   // Cloudinary Credentials
   final String _cloudName = "dahslwjab";
-  final String _apiKey = "886847796499475";
-  final String _apiSecret = "ed5NfxsJf007_4n2lI2GfJTFB3k";
+  final String _apiKey = "can not show this secret";
+  final String _apiSecret = "can not show this secret";
 
   // Firestore instance for cleaner access
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -459,3 +459,4 @@ class _TeacherDashboardScreenState extends State<TeacherDashboardScreen> {
     );
   }
 }
+
