@@ -13,8 +13,8 @@ class ApprovalQueueScreen extends StatefulWidget {
 class _ApprovalQueueScreenState extends State<ApprovalQueueScreen> {
   // EmailJS Credentials
   static const String _serviceId = 'class_sync_admin';
-  static const String _templateId = 'template_3nnc8bx';
-  static const String _publicKey = 'oSQlLeSsuJJmvZXh9';
+  static const String _templateId = 'can not show this secret';
+  static const String _publicKey = 'can not show this secret';
 
   // --- LOGIC: APPROVE TEACHER ---
   Future<void> _approveTeacher(String docId, Map<String, dynamic> data) async {
@@ -240,4 +240,5 @@ class _ApprovalQueueScreenState extends State<ApprovalQueueScreen> {
       ),
     );
   }
+
 }
