@@ -1,5 +1,5 @@
 import 'dart:typed_data';
-import 'package:flutter/services.dart' show rootBundle; // Required for loading assets
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:intl/intl.dart';
@@ -9,22 +9,22 @@ class CertificateService {
     required String name,
     required int rank,
     required String dept,
-    required String semester, // 1. ADDED: Semester parameter
+    required String semester,
     required int score,
+    required String certId, // The Firestore Document ID
   }) async {
     final pdf = pw.Document();
 
-    // 2. ADDED: Load the logo from assets
-    // Change this line in your CertificateService class:
+    // 1. Load the Official Branding
+    // Ensure this path exists in your pubspec.yaml
     final ByteData logoData = await rootBundle.load('assets/icon/app_icon.png');
     final pw.MemoryImage logoImage = pw.MemoryImage(logoData.buffer.asUint8List());
 
-    // Determine colors based on rank
+    // 2. Dynamic Theming based on Achievement Level
     final PdfColor primaryColor = rank == 1
         ? PdfColor.fromHex("#D4AF37") // Gold
-        : (rank == 2 ? PdfColor.fromHex("#C0C0C0") : PdfColor.fromHex("#CD7F32")); // Silver, Bronze
+        : (rank == 2 ? PdfColor.fromHex("#C0C0C0") : PdfColor.fromHex("#CD7F32")); // Silver/Bronze
 
-    final String rankLabel = rank == 1 ? "Gold" : (rank == 2 ? "Silver" : "Platinum");
     final String dateStr = DateFormat('MMMM d, yyyy').format(DateTime.now());
 
     pdf.addPage(
@@ -32,70 +32,100 @@ class CertificateService {
         pageFormat: PdfPageFormat.a4.landscape,
         build: (pw.Context context) {
           return pw.Container(
-            margin: const pw.EdgeInsets.all(20),
+            padding: const pw.EdgeInsets.all(15),
             decoration: pw.BoxDecoration(
-              border: pw.Border.all(color: primaryColor, width: 12),
+              border: pw.Border.all(color: primaryColor, width: 10),
             ),
             child: pw.Container(
-              margin: const pw.EdgeInsets.all(5),
               decoration: pw.BoxDecoration(
                 border: pw.Border.all(color: primaryColor, width: 2),
               ),
-              child: pw.Center(
-                child: pw.Column(
-                  mainAxisAlignment: pw.MainAxisAlignment.center,
-                  children: [
-                    pw.Text("CERTIFICATE OF HONOR",
-                        style: pw.TextStyle(
-                          fontSize: 40,
-                          fontWeight: pw.FontWeight.bold,
-                        )),
-                    pw.SizedBox(height: 10),
-                    pw.Text("ClassSync Academic Excellence Award",
-                        style: const pw.TextStyle(fontSize: 18, color: PdfColors.grey700)),
-                    pw.SizedBox(height: 35),
-                    pw.Text("This recognition is proudly presented to",
-                        style: const pw.TextStyle(fontSize: 16, fontStyle: pw.FontStyle.italic)),
-                    pw.SizedBox(height: 15),
-                    pw.Text(name.toUpperCase(),
-                        style: pw.TextStyle(
-                          fontSize: 45,
-                          fontWeight: pw.FontWeight.bold,
-                          color: primaryColor,
-                        )),
-                    pw.Padding(
-                      padding: const pw.EdgeInsets.symmetric(horizontal: 100),
-                      child: pw.Divider(thickness: 1, color: PdfColors.grey300),
-                    ),
-                    pw.SizedBox(height: 20),
-                    pw.Text(
-                      "For achieving Rank #$rank Contributor in the $dept Department",
-                      style: const pw.TextStyle(fontSize: 16),
+              child: pw.Column(
+                mainAxisAlignment: pw.MainAxisAlignment.center,
+                children: [
+                  // --- HEADER: Official Branding ---
+                  pw.Row(
+                    mainAxisAlignment: pw.MainAxisAlignment.center,
+                    children: [
+                      pw.SizedBox(width: 45, height: 45, child: pw.Image(logoImage)),
+                      pw.SizedBox(width: 15),
+                      pw.Column(
+                        crossAxisAlignment: pw.CrossAxisAlignment.start,
+                        children: [
+                          pw.Text("CLASSSYNC ACADEMIC NETWORK",
+                              style: pw.TextStyle(fontSize: 14, fontWeight: pw.FontWeight.bold, color: PdfColors.black)),
+                          pw.Text("Official Digital Credential",
+                              style: const pw.TextStyle(fontSize: 10, color: PdfColors.grey700)),
+                        ],
+                      ),
+                    ],
+                  ),
+                  pw.SizedBox(height: 15),
+                  pw.Text("CERTIFICATE OF HONOR",
+                      style: pw.TextStyle(fontSize: 40, fontWeight: pw.FontWeight.bold, color: PdfColors.black)),
+                  pw.SizedBox(height: 25),
+
+                  // --- RECIPIENT DATA ---
+                  pw.Text("This recognition is proudly presented to",
+                      style: const pw.TextStyle(fontSize: 16, fontStyle: pw.FontStyle.italic)),
+                  pw.SizedBox(height: 10),
+                  pw.Text(name.toUpperCase(),
+                      style: pw.TextStyle(fontSize: 44, fontWeight: pw.FontWeight.bold, color: primaryColor)),
+
+                  pw.Padding(
+                    padding: const pw.EdgeInsets.symmetric(horizontal: 140),
+                    child: pw.Divider(thickness: 1.5, color: PdfColors.grey400),
+                  ),
+                  pw.SizedBox(height: 20),
+
+                  // --- ACHIEVEMENT DESCRIPTION ---
+                  pw.Padding(
+                    padding: const pw.EdgeInsets.symmetric(horizontal: 50),
+                    child: pw.Text(
+                      "In recognition of outstanding academic performance and contribution, achieving Rank #$rank in the $dept Department during Semester $semester, with a verified Honor Score of $score.",
                       textAlign: pw.TextAlign.center,
+                      style: const pw.TextStyle(fontSize: 14, lineSpacing: 1.4),
                     ),
-                    // 3. UPDATED: Text now includes the semester
-                    pw.Text(
-                      "during Semester $semester with a total Honor Score of $score.",
-                      style: const pw.TextStyle(fontSize: 16),
-                      textAlign: pw.TextAlign.center,
-                    ),
-                    pw.SizedBox(height: 50),
-                    pw.Row(
-                      mainAxisAlignment: pw.MainAxisAlignment.spaceAround,
-                      crossAxisAlignment: pw.CrossAxisAlignment.center,
-                      children: [
-                        _buildSignColumn("ClassSync Admin", "Official Verification"),
-                        // 4. REPLACED: The old seal is now the logo
-                        pw.SizedBox(
-                          width: 80,
-                          height: 80,
-                          child: pw.Image(logoImage),
-                        ),
-                        _buildSignColumn(dateStr, "Date of Issue"),
-                      ],
-                    ),
-                  ],
-                ),
+                  ),
+
+                  pw.SizedBox(height: 35),
+
+                  // --- VERIFICATION FOOTER ---
+                  pw.Row(
+                    mainAxisAlignment: pw.MainAxisAlignment.spaceAround,
+                    crossAxisAlignment: pw.CrossAxisAlignment.end,
+                    children: [
+                      _buildSignColumn("College Administration", "ClassSync Authority"),
+
+                      // --- SECURE QR VERIFICATION ---
+                      pw.Column(
+                        children: [
+                          pw.Container(
+                            padding: const pw.EdgeInsets.all(5),
+                            decoration: pw.BoxDecoration(
+                              color: PdfColors.white,
+                              border: pw.Border.all(color: PdfColors.grey300),
+                            ),
+                            child: pw.BarcodeWidget(
+                              barcode: pw.Barcode.qrCode(),
+                              // Using a clear data format for Admin Scanning
+                              data: certId,
+                              width: 70,
+                              height: 70,
+                            ),
+                          ),
+                          pw.SizedBox(height: 5),
+                          pw.Text("ID: $certId",
+                              style: const pw.TextStyle(fontSize: 7, color: PdfColors.grey600)),
+                          pw.Text("SCAN TO VERIFY",
+                              style: pw.TextStyle(fontSize: 8, fontWeight: pw.FontWeight.bold)),
+                        ],
+                      ),
+
+                      _buildSignColumn(dateStr, "Date of Issuance"),
+                    ],
+                  ),
+                ],
               ),
             ),
           );
@@ -106,25 +136,18 @@ class CertificateService {
     return pdf.save();
   }
 
-  /// Helper function for signature lines, no changes needed here.
   static pw.Widget _buildSignColumn(String topText, String bottomText) {
     return pw.Column(
-      mainAxisSize: pw.MainAxisSize.min,
       children: [
+        pw.Text(topText, style: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 11)),
         pw.Container(
           width: 150,
+          margin: const pw.EdgeInsets.symmetric(vertical: 4),
           decoration: const pw.BoxDecoration(
-            border: pw.Border(top: pw.BorderSide(width: 1, color: PdfColors.black)),
-          ),
-          padding: const pw.EdgeInsets.only(top: 5),
-          child: pw.Text(
-            topText,
-            textAlign: pw.TextAlign.center,
-            style: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 12),
+              border: pw.Border(top: pw.BorderSide(width: 1, color: PdfColors.black))
           ),
         ),
-        pw.SizedBox(height: 2),
-        pw.Text(bottomText, style: const pw.TextStyle(fontSize: 10)),
+        pw.Text(bottomText, style: const pw.TextStyle(fontSize: 9, color: PdfColors.grey800)),
       ],
     );
   }
