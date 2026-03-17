@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
 
 // Screens
 import 'role_selection_screen.dart';
@@ -56,7 +57,141 @@ class _TeacherHomeScreenState extends State<TeacherHomeScreen> {
     Navigator.pop(context);
     Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileViewScreen(userData: _userData!)));
   }
+  void _showVerificationScanner() {
+    final TextEditingController _idController = TextEditingController();showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) => Padding(
+        // Adjust padding for keyboard
+        padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+        child: Container(
+          height: MediaQuery.of(context).size.height * 0.75,
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            children: [
+              const Text("Verify Student Certificate",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+              const SizedBox(height: 20),
 
+              // --- OPTION 1: QR SCANNER ---
+              Expanded(
+                flex: 3,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(15),
+                  child: MobileScanner(
+                    controller: MobileScannerController(
+                      facing: CameraFacing.back,
+                      // Web sometimes needs a lower resolution to initialize faster
+                      detectionSpeed: DetectionSpeed.normal,
+                    ),
+                    onDetect: (capture) {
+                      final List<Barcode> barcodes = capture.barcodes;
+                      if (barcodes.isNotEmpty) {
+                        final String code = barcodes.first.rawValue ?? "";
+                        Navigator.pop(context);
+                        _processVerification(code);
+                      }
+                    },
+                  ),
+                ),
+              ),
+
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 15),
+                child: Text("OR", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey)),
+              ),
+
+              // --- OPTION 2: MANUAL ID ENTRY ---
+              TextField(
+                controller: _idController,
+                decoration: InputDecoration(
+                  hintText: "Enter Certificate ID (e.g. POLY-MND-...)",
+                  prefixIcon: const Icon(Icons.edit),
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                  suffixIcon: IconButton(
+                    icon: const Icon(Icons.arrow_forward, color: Colors.blue),
+                    onPressed: () {
+                      if (_idController.text.isNotEmpty) {
+                        Navigator.pop(context);
+                        _processVerification(_idController.text.trim());
+                      }
+                    },
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10),
+              const Text("Manual entry is useful if the QR code is damaged.",
+                  style: TextStyle(fontSize: 11, color: Colors.grey)),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Future<void> _processVerification(String certId) async {
+    // Show loading
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) => const Center(child: CircularProgressIndicator())
+    );
+
+    try {
+      final doc = await FirebaseFirestore.instance
+          .collection('verified_certificates')
+          .doc(certId)
+          .get();
+
+      if (!mounted) return;
+      Navigator.pop(context); // Remove loading
+
+      if (doc.exists) {
+        final data = doc.data()!;
+        _showResultDialog(
+          title: "Certificate Verified",
+          message: "This is an authentic ClassSync document.\n\n"
+              "Name: ${data['name']}\n"
+              "Rank: #${data['rank']}\n"
+              "Dept: ${data['department']}\n"
+              "Score: ${data['honorScore']}",
+          isSuccess: true,
+        );
+      } else {
+        _showResultDialog(
+          title: "Verification Failed",
+          message: "Invalid Certificate ID. This document is not registered in our database.",
+          isSuccess: false,
+        );
+      }
+    } catch (e) {
+      Navigator.pop(context);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Error: $e")));
+    }
+  }
+
+  void _showResultDialog({required String title, required String message, required bool isSuccess}) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Row(
+          children: [
+            Icon(isSuccess ? Icons.verified : Icons.gpp_bad,
+                color: isSuccess ? Colors.green : Colors.red),
+            const SizedBox(width: 10),
+            Text(title),
+          ],
+        ),
+        content: Text(message),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(context), child: const Text("CLOSE"))
+        ],
+      ),
+    );
+  }
   Future<void> _fetchTeacherProfile() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) return;
@@ -79,6 +214,7 @@ class _TeacherHomeScreenState extends State<TeacherHomeScreen> {
     });
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) => _navigateToInbox());
   }
+
 
   void _checkInitialMessage() async {
     RemoteMessage? initialMessage = await FirebaseMessaging.instance.getInitialMessage();
@@ -187,6 +323,15 @@ class _TeacherHomeScreenState extends State<TeacherHomeScreen> {
                 leading: const Icon(Icons.chat_bubble_outline, color: Colors.blue),
                 title: const Text("Student Consultations"),
                 onTap: () { Navigator.pop(context); _navigateToInbox(); },
+              ),
+              ListTile(
+                leading: const Icon(Icons.qr_code_scanner, color: Colors.amber),
+                title: const Text("Verify Student Certificate"),
+                subtitle: const Text("Authenticate honors credentials"),
+                onTap: () {
+                  Navigator.pop(context);
+                  _showVerificationScanner();
+                },
               ),
               _buildMailboxTile(uid),
               ListTile(
