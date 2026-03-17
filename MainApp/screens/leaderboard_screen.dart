@@ -28,10 +28,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
       ),
       body: Column(
         children: [
-          // 1. GLOBAL ACHIEVEMENT HEADER
           _buildGlobalAchievementHeader(),
-
-          // 2. FILTERED LEADERBOARD LIST
           Expanded(
             child: StreamBuilder<QuerySnapshot>(
               stream: _getFilteredStream(),
@@ -126,19 +123,38 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                     backgroundColor: Colors.amber,
                     foregroundColor: Colors.black,
                   ),
-                  onPressed: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => CertificatePreviewPage(
-                        name: userAchievement!['name'],
-                        rank: globalRank,
-                        dept: userAchievement['department'],
-                        // FIX: Added the semester parameter required by the constructor
-                        semester: userAchievement['semester'] ?? "N/A",
-                        score: _parseScore(userAchievement['honorScore']),
+                  onPressed: () async {
+                    // 1. Generate a unique Credential ID (Not stored in Cloudinary)
+                    String certId = "POLY-MND-${DateTime.now().millisecondsSinceEpoch}";
+
+                    // 2. Store only the metadata/credentials in Firestore
+                    await FirebaseFirestore.instance.collection('verified_certificates').doc(certId).set({
+                      'certId': certId,
+                      'name': userAchievement!['name'],
+                      'rank': globalRank,
+                      'department': userAchievement['department'],
+                      'semester': userAchievement['semester'] ?? "N/A",
+                      'honorScore': _parseScore(userAchievement['honorScore']),
+                      'issuedAt': FieldValue.serverTimestamp(),
+                      'uid': currentUserId,
+                    });
+
+                    // 3. Navigate to preview, passing the ID for the QR code
+                    if (!context.mounted) return;
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => CertificatePreviewPage(
+                          name: userAchievement!['name'],
+                          rank: globalRank,
+                          dept: userAchievement['department'],
+                          semester: userAchievement['semester'] ?? "N/A",
+                          score: _parseScore(userAchievement['honorScore']),
+                          certId: certId, // Ensure this exists in your CertificatePreviewPage constructor
+                        ),
                       ),
-                    ),
-                  ),
+                    );
+                  },
                 )
               else
                 Container(
